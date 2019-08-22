@@ -13,7 +13,7 @@ export default class Crud extends Component {
     }
   }
   
-  get = () => {
+  getData = () => {
     fetch('http://localhost:7777/notes')
     .then(response => response.json())
     .then(data => {
@@ -22,7 +22,7 @@ export default class Crud extends Component {
     })
   }
   
-  post = (id, text) => {
+  postNote = (id, text) => {
     const data = {
       id: id,
       content: text
@@ -36,12 +36,12 @@ export default class Crud extends Component {
     })
   }
   
-  delete = (id) => {
+  deleteNote = (id) => {
     fetch('http://localhost:7777/notes/' + id, {
       method: 'DELETE'
     })
     .then(() => {
-      this.get();
+      this.getData();
     })
     .catch(err => {
       console.error(err)
@@ -50,7 +50,7 @@ export default class Crud extends Component {
   }
 
   componentDidMount() {
-    this.get();
+    this.getData();
   }
   
   handleChange = (evt) => {
@@ -60,9 +60,9 @@ export default class Crud extends Component {
 
   handleSubmit = (evt) => {
     evt.preventDefault();
-    this.post(this.state.id + 1, this.state.newNote);
+    this.postNote(this.state.id + 1, this.state.newNote);
     this.setState({newNote: ''})
-    this.get();
+    this.getData();
  }
 
   render() {
@@ -72,7 +72,7 @@ export default class Crud extends Component {
         <button className="update" onClick={this.get}>Обновить</button>
         <div className="notes">
           {this.state.notes.map(o => (
-            <Note key={o.id} id={o.id} text={o.content} delete={this.delete} />
+            <Note key={o.id} id={o.id} text={o.content} delete={this.deleteNote} />
           ))}
         </div>
         <Form handleSubmit={this.handleSubmit} handleChange={this.handleChange} value={this.state.newNote}/>
